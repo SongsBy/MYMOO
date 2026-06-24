@@ -65,6 +65,9 @@ abstract final class AppColors {
   static const Color bgInverse = Color(0xFFFFFFFF);
 
   // ── Opacity ──
+  /// 검정 12% (그림자)
+  static const Color opacity12 = Color(0x1F000000);
+
   /// 검정 20% (딤/오버레이)
   static const Color opacity20 = Color(0x33000000);
 

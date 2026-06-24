@@ -7,7 +7,7 @@ part 'restaurant_model.g.dart';
 ///
 /// API 응답(JSON) ↔ 객체 변환은 이 data 레이어 model 에서만 한다.
 @freezed
-class RestaurantModel with _$RestaurantModel {
+abstract class RestaurantModel with _$RestaurantModel {
   const factory RestaurantModel({
     required int id,
     required String name,
@@ -24,7 +24,7 @@ class RestaurantModel with _$RestaurantModel {
 /// - cursor 방식: nextCursor (int/String/DateTime)
 /// - offset 방식: 이 래퍼를 page/offset/totalPages 구조로 변경
 @freezed
-class RestaurantPageModel with _$RestaurantPageModel {
+abstract class RestaurantPageModel with _$RestaurantPageModel {
   const factory RestaurantPageModel({
     required List<RestaurantModel> items,
     required bool hasNext,

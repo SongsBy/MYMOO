@@ -29,6 +29,10 @@ abstract final class AppTextStyles {
     );
   }
 
+  // Heading1 — 24px
+  static final TextStyle heading1Bold = _base(24, FontWeight.w700);
+  static final TextStyle heading1SemiBold = _base(24, FontWeight.w600);
+
   // Heading2 — 20px
   static final TextStyle heading2Bold = _base(20, FontWeight.w700);
   static final TextStyle heading2SemiBold = _base(20, FontWeight.w600);
@@ -54,4 +58,8 @@ abstract final class AppTextStyles {
   static final TextStyle caption1Bold = _base(12, FontWeight.w700);
   static final TextStyle caption1SemiBold = _base(12, FontWeight.w600);
   static final TextStyle caption1Medium = _base(12, FontWeight.w500);
+
+  // Caption2 — 10px (앱바 액션/바텀네비 라벨 등 최소 라벨용)
+  static final TextStyle caption2SemiBold = _base(10, FontWeight.w600);
+  static final TextStyle caption2Medium = _base(10, FontWeight.w500);
 }

@@ -40,6 +40,10 @@ Failure mapDioExceptionToFailure(DioException e) {
     serverMessage = data['message'] as String?;
   }
 
+  if (statusCode == null) {
+    return Failure.unknown(message: serverMessage);
+  }
+
   return switch (statusCode) {
     401 => const Failure.unauthorized(),
     403 => const Failure.unauthorized(),

@@ -37,7 +37,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen> {
     final pos = _scrollController.position;
     // 끝에서 200px 이내로 들어오면 다음 페이지 요청 (중복 가드는 notifier 가 처리)
     if (pos.pixels >= pos.maxScrollExtent - 200) {
-      ref.read(restaurantListNotifierProvider.notifier).loadNextPage();
+      ref.read(restaurantListProvider.notifier).loadNextPage();
     }
   }
 
@@ -49,8 +49,8 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(restaurantListNotifierProvider);
-    final notifier = ref.read(restaurantListNotifierProvider.notifier);
+    final state = ref.watch(restaurantListProvider);
+    final notifier = ref.read(restaurantListProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: const Text('식당')),
@@ -60,7 +60,7 @@ class _RestaurantListScreenState extends ConsumerState<RestaurantListScreen> {
 
         // 2) 첫 페이지 에러 → 전체 재시도
         error: (error, _) => AppErrorView(
-          onRetry: () => ref.invalidate(restaurantListNotifierProvider),
+          onRetry: () => ref.invalidate(restaurantListProvider),
         ),
 
         // 3) 데이터

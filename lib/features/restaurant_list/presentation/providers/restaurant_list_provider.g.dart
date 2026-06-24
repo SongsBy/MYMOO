@@ -22,7 +22,7 @@ part of 'restaurant_list_provider.dart';
 ///   → 다음 페이지 실패가 이미 쌓인 목록을 날려버리지 않게 한다.
 
 @ProviderFor(RestaurantListNotifier)
-final restaurantListProvider = RestaurantListNotifierProvider._();
+const restaurantListProvider = RestaurantListNotifierProvider._();
 
 /// 식당 리스트 페이지네이션 Notifier.
 ///
@@ -51,7 +51,7 @@ final class RestaurantListNotifierProvider
   /// - 첫 페이지 로딩/에러 = state 자체(AsyncLoading/AsyncError) 로 표현.
   /// - 다음 페이지 로딩/에러 = 별도 getter(isLoadingMore / nextPageError) 로 표현
   ///   → 다음 페이지 실패가 이미 쌓인 목록을 날려버리지 않게 한다.
-  RestaurantListNotifierProvider._()
+  const RestaurantListNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -92,6 +92,7 @@ abstract class _$RestaurantListNotifier
   @$mustCallSuper
   @override
   void runBuild() {
+    final created = build();
     final ref =
         this.ref
             as $Ref<AsyncValue<List<RestaurantModel>>, List<RestaurantModel>>;
@@ -106,6 +107,6 @@ abstract class _$RestaurantListNotifier
               Object?,
               Object?
             >;
-    element.handleCreate(ref, build);
+    element.handleValue(ref, created);
   }
 }

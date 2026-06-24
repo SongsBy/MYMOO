@@ -30,10 +30,7 @@ class AppErrorView extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
-            FilledButton(
-              onPressed: onRetry,
-              child: const Text('다시 시도'),
-            ),
+            FilledButton(onPressed: onRetry, child: const Text('다시 시도')),
           ],
         ),
       ),

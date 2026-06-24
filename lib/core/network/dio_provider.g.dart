@@ -17,7 +17,7 @@ part of 'dio_provider.dart';
 /// 이 provider 가 모든 retrofit API / repository 의 dio 주입원이다.
 
 @ProviderFor(dio)
-final dioProvider = DioProvider._();
+const dioProvider = DioProvider._();
 
 /// 앱 전역 dio 인스턴스.
 ///
@@ -36,7 +36,7 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   /// - 로깅 인터셉터는 dev/staging 에서만 붙이는 것을 권장 (prod 민감정보 로깅 금지).
   ///
   /// 이 provider 가 모든 retrofit API / repository 의 dio 주입원이다.
-  DioProvider._()
+  const DioProvider._()
     : super(
         from: null,
         argument: null,

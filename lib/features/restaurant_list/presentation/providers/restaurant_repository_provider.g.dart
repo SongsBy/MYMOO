@@ -15,7 +15,7 @@ part of 'restaurant_repository_provider.dart';
 /// - presentation/notifier 는 이 provider 만 watch 하고 구현체를 모른다.
 
 @ProviderFor(restaurantRepository)
-final restaurantRepositoryProvider = RestaurantRepositoryProvider._();
+const restaurantRepositoryProvider = RestaurantRepositoryProvider._();
 
 /// RestaurantRepository 주입 provider.
 ///
@@ -36,7 +36,7 @@ final class RestaurantRepositoryProvider
   /// - dioProvider 에서 dio 를 받아 retrofit API 를 만들고, 구현체로 감싼다.
   /// - 반환 타입은 추상(RestaurantRepository) 으로 노출한다 (의존성 역전 유지).
   /// - presentation/notifier 는 이 provider 만 watch 하고 구현체를 모른다.
-  RestaurantRepositoryProvider._()
+  const RestaurantRepositoryProvider._()
     : super(
         from: null,
         argument: null,
