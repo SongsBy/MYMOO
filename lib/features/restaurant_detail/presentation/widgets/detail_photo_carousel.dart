@@ -12,10 +12,17 @@ import '../../../../core/theme/app_text_styles.dart';
 /// 첫 진입 시에는 리스트에서 넘겨받은 썸네일 1장만 들어올 수 있고,
 /// 상세 로드가 끝나면 전체 사진으로 교체된다.
 class DetailPhotoCarousel extends StatefulWidget {
-  const DetailPhotoCarousel({super.key, required this.photos});
+  const DetailPhotoCarousel({
+    super.key,
+    required this.photos,
+    this.borderRadius = const BorderRadius.all(Radius.circular(AppRadius.md)),
+  });
 
   /// 표시할 사진 URL 목록(최소 1장).
   final List<String> photos;
+
+  /// 이미지 모서리 둥글기. full-bleed 로 쓸 땐 [BorderRadius.zero].
+  final BorderRadius borderRadius;
 
   @override
   State<DetailPhotoCarousel> createState() => _DetailPhotoCarouselState();
@@ -42,7 +49,7 @@ class _DetailPhotoCarouselState extends State<DetailPhotoCarousel> {
         children: [
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.md),
+              borderRadius: widget.borderRadius,
               child: PageView.builder(
                 controller: _controller,
                 itemCount: photos.length,

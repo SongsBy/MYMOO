@@ -22,6 +22,7 @@ class SheetButton extends StatelessWidget {
     required this.label,
     this.onPressed,
     this.onIconTap,
+    this.iconSelected = false,
   });
 
   /// 메인 버튼 라벨.
@@ -33,6 +34,9 @@ class SheetButton extends StatelessWidget {
   /// 좌측 하트 버튼 탭 콜백. null 이면 하트 버튼을 숨김(full 변형).
   final VoidCallback? onIconTap;
 
+  /// 좌측 하트(찜) 선택 여부. true 면 채워진 하트(brand 색)로 표시한다.
+  final bool iconSelected;
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -42,7 +46,7 @@ class SheetButton extends StatelessWidget {
         child: Row(
           children: [
             if (onIconTap != null) ...[
-              _HeartIconButton(onTap: onIconTap!),
+              _HeartIconButton(onTap: onIconTap!, selected: iconSelected),
               const SizedBox(width: 12),
             ],
             Expanded(
@@ -64,11 +68,14 @@ class SheetButton extends StatelessWidget {
   }
 }
 
-/// 51×51 정사각 하트(라인) 아이콘 버튼.
+/// 51×51 정사각 하트(찜) 아이콘 버튼.
+///
+/// [selected] 면 채워진 하트(brand 색), 아니면 라인 하트로 그린다.
 class _HeartIconButton extends StatelessWidget {
-  const _HeartIconButton({required this.onTap});
+  const _HeartIconButton({required this.onTap, this.selected = false});
 
   final VoidCallback onTap;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +94,17 @@ class _HeartIconButton extends StatelessWidget {
             border: Border.all(color: AppColors.borderPrimary),
           ),
           child: SvgPicture.asset(
-            'asset/icons/heart/ic_heartline.svg',
+            selected
+                ? 'asset/icons/heart/ic_heartfill.svg'
+                : 'asset/icons/heart/ic_heartline.svg',
             width: 24,
             height: 24,
+            colorFilter: selected
+                ? const ColorFilter.mode(
+                    AppColors.brandPrimary,
+                    BlendMode.srcIn,
+                  )
+                : null,
           ),
         ),
       ),

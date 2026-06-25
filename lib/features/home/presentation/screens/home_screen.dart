@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/app_spacing.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../qr_payment/presentation/screens/qr_payment_screen.dart';
 import '../../../root_tab/presentation/providers/root_tab_index_provider.dart';
 import '../widgets/home_balance_card.dart';
 import '../widgets/home_find_map_decoration.dart';
@@ -86,7 +87,13 @@ class HomeScreen extends ConsumerWidget {
                               height: 100,
                             ),
                           ),
-                          onTap: () {},
+                          // QR 결제 — 네이티브 카메라 스캔 화면을 전체화면으로.
+                          onTap: () =>
+                              Navigator.of(context, rootNavigator: true).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const QrPaymentScreen(),
+                            ),
+                          ),
                         ),
                       ),
                     ],

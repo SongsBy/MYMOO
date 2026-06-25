@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- QR 결제: 카메라 스캔용. 카메라 없는 기기도 설치 가능하도록 required=false. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
         android:label="mymoo"
         android:name="${applicationName}"

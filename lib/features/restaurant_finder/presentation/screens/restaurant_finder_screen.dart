@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,8 +24,34 @@ import '../widgets/restaurant_summary_card.dart';
 ///
 /// 페이지네이션은 `restaurant_list` 패턴을 따른다(첫 페이지=state / 다음 페이지=getter).
 /// 다음 페이지 트리거는 바텀시트 리스트의 스크롤을 [NotificationListener] 로 감지한다.
-class RestaurantFinderScreen extends StatelessWidget {
+class RestaurantFinderScreen extends StatefulWidget {
   const RestaurantFinderScreen({super.key});
+
+  @override
+  State<RestaurantFinderScreen> createState() => _RestaurantFinderScreenState();
+}
+
+class _RestaurantFinderScreenState extends State<RestaurantFinderScreen> {
+  // 시트 높이 비율(화면 대비). snapSizes 도 이 값들과 일치시킨다.
+  static const double _minSize = 0.12;
+  static const double _initialSize = 0.3;
+  static const double _maxSize = 0.95;
+
+  // 이 높이를 넘어서면 상단(검색+칩)이 페이드아웃되기 시작하고,
+  // [_maxSize] 에 도달하면 완전히 사라진다.
+  static const double _overlayHideStart = 0.6;
+
+  // 시트의 현재 높이 비율. 상단 오버레이의 표시/숨김을 구동한다.
+  // setState 대신 ValueNotifier 로 오버레이만 다시 그려 비용을 줄인다.
+  final ValueNotifier<double> _sheetExtent = ValueNotifier<double>(
+    _initialSize,
+  );
+
+  @override
+  void dispose() {
+    _sheetExtent.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +59,36 @@ class RestaurantFinderScreen extends StatelessWidget {
       backgroundColor: AppColors.bgSecondary,
       // 검색 바가 입력형으로 바뀌어도 시트가 키보드에 밀려 깨지지 않도록.
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          // 1) 지도 영역 (추후 Google Map 연동)
-          const Positioned.fill(child: _MapPlaceholder()),
+      // 시트 높이 변화를 받아 상단 오버레이 표시/숨김에 반영한다.
+      body: NotificationListener<DraggableScrollableNotification>(
+        onNotification: (n) {
+          _sheetExtent.value = n.extent;
+          return false;
+        },
+        child: Stack(
+          children: [
+            // 1) 지도 영역 (추후 Google Map 연동)
+            const Positioned.fill(child: _MapPlaceholder()),
 
-          // 2) 식당 리스트 — 드래그 가능한 바텀시트
-          DraggableScrollableSheet(
-            initialChildSize: 0.5,
-            minChildSize: 0.12,
-            maxChildSize: 0.88,
-            snap: true,
-            snapSizes: const [0.12, 0.5, 0.88],
-            builder: (context, scrollController) =>
-                _RestaurantSheet(scrollController: scrollController),
-          ),
+            // 2) 식당 리스트 — 드래그 가능한 바텀시트
+            DraggableScrollableSheet(
+              initialChildSize: _initialSize,
+              minChildSize: _minSize,
+              maxChildSize: _maxSize,
+              snap: true,
+              snapSizes: const [_minSize, _initialSize, _maxSize],
+              builder: (context, scrollController) =>
+                  _RestaurantSheet(scrollController: scrollController),
+            ),
 
-          // 3) 상단 검색 + 카테고리 (지도 위 플로팅, 시트보다 위)
-          const _TopOverlay(),
-        ],
+            // 3) 상단 검색 + 카테고리 (지도 위 플로팅, 시트가 max 면 가려짐)
+            _TopOverlay(
+              sheetExtent: _sheetExtent,
+              hideStart: _overlayHideStart,
+              hideEnd: _maxSize,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -97,32 +135,72 @@ class _MapPlaceholder extends StatelessWidget {
 }
 
 /// 지도 위에 떠 있는 검색 바 + 카테고리 필터.
+///
+/// 앱바가 없는 화면이라 상태바 인셋([SafeArea])을 직접 처리해 최상단에 붙인다.
+/// 시트 높이([sheetExtent])가 [hideStart]→[hideEnd] 로 올라갈수록 위로 밀려나며
+/// 사라지고(=시트 max 면 완전히 가려짐), 시트가 내려오면 다시 나타난다.
 class _TopOverlay extends StatelessWidget {
-  const _TopOverlay();
+  const _TopOverlay({
+    required this.sheetExtent,
+    required this.hideStart,
+    required this.hideEnd,
+  });
+
+  /// 시트의 현재 높이 비율(0~1).
+  final ValueListenable<double> sheetExtent;
+
+  /// 페이드아웃이 시작되는 시트 높이.
+  final double hideStart;
+
+  /// 완전히 사라지는 시트 높이(보통 maxChildSize).
+  final double hideEnd;
 
   @override
   Widget build(BuildContext context) {
-    return const Positioned(
+    return Positioned(
       top: 0,
       left: 0,
       right: 0,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.xl,
-              AppSpacing.md,
-              AppSpacing.xl,
-              AppSpacing.sm,
-            ),
-            child: RestaurantSearchBar(
-              backgroundColor: AppColors.bgInverse,
-              elevation: 2,
-            ),
+      child: SafeArea(
+        bottom: false,
+        child: ValueListenableBuilder<double>(
+          valueListenable: sheetExtent,
+          builder: (context, extent, child) {
+            // hideStart→hideEnd 구간에서 0→1 로 진행(시트가 올라올수록 1).
+            final progress = ((extent - hideStart) / (hideEnd - hideStart))
+                .clamp(0.0, 1.0);
+            return IgnorePointer(
+              // 절반 이상 숨겨지면 탭을 받지 않는다.
+              ignoring: progress > 0.5,
+              child: Opacity(
+                opacity: 1 - progress,
+                // 자기 높이만큼 위로 밀어 올려 자연스럽게 사라지게 한다.
+                child: FractionalTranslation(
+                  translation: Offset(0, -progress),
+                  child: child,
+                ),
+              ),
+            );
+          },
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  AppSpacing.xl,
+                  AppSpacing.md,
+                  AppSpacing.xl,
+                  AppSpacing.sm,
+                ),
+                child: RestaurantSearchBar(
+                  backgroundColor: AppColors.bgInverse,
+                  elevation: 2,
+                ),
+              ),
+              CategoryFilterBar(),
+            ],
           ),
-          CategoryFilterBar(),
-        ],
+        ),
       ),
     );
   }
@@ -155,8 +233,9 @@ class _RestaurantSheet extends ConsumerWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(AppRadius.md)),
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppRadius.md),
+        ),
         child: RefreshIndicator(
           onRefresh: notifier.refresh,
           child: NotificationListener<ScrollNotification>(

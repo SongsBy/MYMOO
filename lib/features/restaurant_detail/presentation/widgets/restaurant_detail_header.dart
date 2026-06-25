@@ -34,15 +34,32 @@ class RestaurantDetailHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        DetailPhotoCarousel(photos: photos),
-        const SizedBox(height: AppSpacing.xl),
-        _NameAndProperty(summary: summary, region: detail?.region),
-        if (detail != null) ...[
-          const SizedBox(height: AppSpacing.lg),
-          _InfoRows(detail: detail!),
-          const SizedBox(height: AppSpacing.lg),
-          _TagWrap(tags: detail!.tags),
-        ],
+        // 상단 큰 이미지는 화면 전체 폭을 차지(full-bleed) — 라운드 없이 모서리까지.
+        DetailPhotoCarousel(
+          photos: photos,
+          borderRadius: BorderRadius.zero,
+        ),
+        // 이미지 아래 정보 블록만 좌우 패딩을 준다.
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            AppSpacing.xl,
+            AppSpacing.xl,
+            AppSpacing.xl,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _NameAndProperty(summary: summary, region: detail?.region),
+              if (detail != null) ...[
+                const SizedBox(height: AppSpacing.lg),
+                _InfoRows(detail: detail!),
+                const SizedBox(height: AppSpacing.lg),
+                _TagWrap(tags: detail!.tags),
+              ],
+            ],
+          ),
+        ),
       ],
     );
   }

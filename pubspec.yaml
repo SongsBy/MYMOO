@@ -46,6 +46,14 @@ dependencies:
   logger: ^2.4.0
   go_router: ^14.0.0
   flutter_svg: ^2.0.17
+  # QR 결제 — 네이티브 카메라 프리뷰 + QR/바코드 인식.
+  mobile_scanner: ^7.0.0
+  # 갤러리에서 QR 이미지 불러오기.
+  image_picker: ^1.1.2
+  # 내 QR 코드 렌더링 — 결제 코드 문자열을 QR 이미지로 그린다.
+  qr_flutter: ^4.1.0
+  # 내 QR 코드 화면에서 네이티브 화면 밝기를 최대로 올리고 복원한다.
+  screen_brightness: ^2.1.3
 
 dev_dependencies:
   flutter_test:

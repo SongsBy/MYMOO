@@ -59,11 +59,16 @@ class RootTabScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(rootTabIndexProvider);
 
+    // 주변밥집(지도) 탭은 검색 바를, 내정보 탭은 자체 "내정보" 앱바를 화면
+    // 최상단에 붙이므로 공통 로고 앱바를 숨긴다. 그 외 탭은 [HomeAppBar] 노출.
+    final showAppBar =
+        currentIndex != RootTabs.nearby && currentIndex != RootTabs.myInfo;
+
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
       body: Column(
         children: [
-          const HomeAppBar(),
+          if (showAppBar) const HomeAppBar(),
           Expanded(
             child: IndexedStack(index: currentIndex, children: _tabScreens),
           ),

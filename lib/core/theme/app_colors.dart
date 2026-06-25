@@ -64,6 +64,9 @@ abstract final class AppColors {
   /// 반전 배경 (카드/시트 등)
   static const Color bgInverse = Color(0xFFFFFFFF);
 
+  /// QR 스캐너 등 카메라 풀스크린 배경 (거의 검정)
+  static const Color scanDark = Color(0xFF111111);
+
   // ── Opacity ──
   /// 검정 12% (그림자)
   static const Color opacity12 = Color(0x1F000000);
