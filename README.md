@@ -118,22 +118,9 @@ features/<feature_name>/
 
 ---
 
-## 3. 아키텍처 핵심 규칙
 
-`CLAUDE.md`가 모든 코드 작업의 절대 기준이며, 요약하면:
 
-1. **반복 코드 금지** — 재사용 UI는 `common/widgets/`, 인프라는 `core/`에 한 번만 만든다.
-2. **하드코딩 금지** — 색상→`AppColors`, 텍스트→`AppTextStyles`, 간격→`AppSpacing`, URL→`AppConfig`.
-3. **의존성 방향 준수** — presentation은 repository(provider) 경유로만 데이터에 접근.
-4. **상태관리는 Riverpod 3.x `@riverpod`만** — `Provider`/`StateNotifier`/`ChangeNotifier` 직접 사용 금지.
-5. **모델/상태는 freezed**, 에러는 `Failure` sealed class + `AsyncValue.when`.
-6. **리스트는 페이지네이션 직접 구현** — 외부 패키지 없이 `restaurant_list` 패턴 복사.
-7. **토큰은 `flutter_secure_storage`** — 민감정보 로깅·하드코딩 금지.
-8. **생성 파일(`*.g.dart`, `*.freezed.dart`) 직접 수정 금지.**
-
----
-
-## 4. 시작하기
+## 3. 시작하기
 
 ### 사전 요구사항
 - Flutter **3.44.0 (stable)** 고정
@@ -157,15 +144,10 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-> 📌 **현재 상태 메모**
-> - `CLAUDE.md`에는 dev/staging/prod **flavor 분리**와 `--dart-define-from-file` 주입이 명시돼 있으나,
->   현재 코드는 단일 `lib/main.dart` 엔트리로 동작한다. flavor 엔트리(`main_dev/staging/prod.dart`)와 `config/*.json`은 아직 도입 전이다.
-> - 라우팅도 `go_router` 의존성은 추가돼 있으나 현재 `main.dart`는 `RootTabScreen`을 `home`으로 직접 띄운다.
-> - 식당 데이터는 아직 실제 API 대신 `*_dummy_data.dart`(더미)로 동작한다.
 
 ---
 
-## 5. 자주 쓰는 명령어
+## 4. 자주 쓰는 명령어
 
 ```bash
 # 의존성 설치
@@ -191,7 +173,7 @@ flutter build appbundle --obfuscate --split-debug-info=build/symbols
 
 ---
 
-## 6. 주요 기능(feature)
+## 5. 주요 기능(feature)
 
 | feature | 설명 |
 |---|---|
@@ -206,7 +188,7 @@ flutter build appbundle --obfuscate --split-debug-info=build/symbols
 
 ---
 
-## 7. 백엔드 합의 필요 항목
+## 6. 백엔드 합의 필요 항목
 
 아래는 임의로 정하지 않고 백엔드 팀과 합의 후 확정한다 (현재는 기본 구현/더미만).
 
