@@ -28,9 +28,10 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // HomeAppBar 와 동일한 배경색(bgInverse)으로 통일.
+    // HomeAppBar 와 동일한 살짝 오프화이트(bgPrimary) 배경으로 통일.
+    // 순백 퀵 액션 원이 이 위에서 또렷이 구분되도록 한다.
     return ColoredBox(
-      color: AppColors.bgInverse,
+      color: AppColors.bgPrimary,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

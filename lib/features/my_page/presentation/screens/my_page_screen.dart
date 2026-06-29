@@ -37,7 +37,8 @@ class _MyPageAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.bgInverse,
+      // HomeAppBar 와 동일한 배경색(bgPrimary)으로 통일.
+      color: AppColors.bgPrimary,
       child: SafeArea(
         bottom: false,
         child: SizedBox(

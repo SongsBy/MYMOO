@@ -13,7 +13,9 @@ class HomeAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.bgInverse,
+      // 본문과 통일한 살짝 오프화이트 배경.
+      // 순백 퀵 액션 원이 이 위에서 또렷이 떠 보이도록 한다.
+      color: AppColors.bgPrimary,
       child: SafeArea(
         bottom: false,
         child: SizedBox(

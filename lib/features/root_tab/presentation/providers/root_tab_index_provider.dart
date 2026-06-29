@@ -14,8 +14,8 @@ abstract final class RootTabs {
   /// 주변밥집(밥집 찾기) 탭.
   static const int nearby = 1;
 
-  /// 찜 탭.
-  static const int favorites = 2;
+  /// 주문 내역("내 식사") 탭.
+  static const int orderHistory = 2;
 
   /// 내정보 탭.
   static const int myInfo = 3;

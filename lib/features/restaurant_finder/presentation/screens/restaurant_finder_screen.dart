@@ -35,7 +35,7 @@ class _RestaurantFinderScreenState extends State<RestaurantFinderScreen> {
   // 시트 높이 비율(화면 대비). snapSizes 도 이 값들과 일치시킨다.
   static const double _minSize = 0.12;
   static const double _initialSize = 0.3;
-  static const double _maxSize = 0.95;
+  static const double _maxSize = 0.935;
 
   // 이 높이를 넘어서면 상단(검색+칩)이 페이드아웃되기 시작하고,
   // [_maxSize] 에 도달하면 완전히 사라진다.

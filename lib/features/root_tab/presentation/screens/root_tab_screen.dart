@@ -6,7 +6,7 @@ import '../../../../common/widgets/bottom_nav/root_bottom_nav.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../my_page/presentation/screens/my_page_screen.dart';
-import '../../../my_restaurant/presentation/screens/my_restaurant_screen.dart';
+import '../../../order_list/presentation/screens/order_list_screen.dart';
 import '../../../restaurant_finder/presentation/screens/restaurant_finder_screen.dart';
 import '../providers/root_tab_index_provider.dart';
 
@@ -24,7 +24,7 @@ class RootTabScreen extends ConsumerWidget {
   static const _tabScreens = <Widget>[
     HomeScreen(),
     RestaurantFinderScreen(),
-    MyRestaurantScreen(),
+    OrderListScreen(),
     MyPageScreen(),
   ];
 
@@ -41,12 +41,9 @@ class RootTabScreen extends ConsumerWidget {
       label: '주변밥집',
     ),
     RootBottomNavItem(
-      // 꽉 찬(채워진) 24×24 하트 1개를 상태별 색으로만 칠한다.
-      // 비선택=gray(disable), 선택=brand(주황). (라인 하트 아님)
-      activeIcon: 'asset/icons/heart/ic_heartfill.svg',
-      inactiveIcon: 'asset/icons/heart/ic_heartfill.svg',
-      label: '찜',
-      tinted: true,
+      activeIcon: 'asset/icons/other_component/ic_able_reservation.svg',
+      inactiveIcon: 'asset/icons/other_component/ic_disable_reservation.svg',
+      label: '내 식사',
     ),
     RootBottomNavItem(
       activeIcon: 'asset/icons/user/ic_userfill.svg',
@@ -59,10 +56,12 @@ class RootTabScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentIndex = ref.watch(rootTabIndexProvider);
 
-    // 주변밥집(지도) 탭은 검색 바를, 내정보 탭은 자체 "내정보" 앱바를 화면
-    // 최상단에 붙이므로 공통 로고 앱바를 숨긴다. 그 외 탭은 [HomeAppBar] 노출.
-    final showAppBar =
-        currentIndex != RootTabs.nearby && currentIndex != RootTabs.myInfo;
+    // 주변밥집(지도) 탭은 검색 바를, 주문 내역 탭은 "내 식사", 내정보 탭은
+    // "내정보" 앱바를 각자 화면 최상단에 붙이므로 공통 로고 앱바를 숨긴다.
+    // 그 외 탭은 [HomeAppBar] 노출.
+    final showAppBar = currentIndex != RootTabs.nearby &&
+        currentIndex != RootTabs.orderHistory &&
+        currentIndex != RootTabs.myInfo;
 
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
